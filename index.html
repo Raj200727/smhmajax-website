@@ -6,9 +6,7 @@
 <title>Sankat Mochan Hanuman Mandir & Cultural Centre | Ajax, Ontario</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="assets/css/style.css">
-
 </head>
 <body>
 
@@ -440,45 +438,6 @@
   </div>
 </footer>
 
-<script>
-// ── Mobile menu ──
-function toggleMenu(){
-  const m=document.getElementById('mobile-menu');
-  m.classList.toggle('open');
-}
-
-// ── Scroll animations ──
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
-},{threshold:0.1});
-document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
-
-// ── Sticky nav shadow ──
-window.addEventListener('scroll',()=>{
-  const nav=document.getElementById('nav');
-  nav.style.boxShadow=window.scrollY>50?'0 4px 30px rgba(74,0,0,0.4)':'none';
-});
-
-// ── Donate amount picker ──
-function selectAmount(el,val){
-  document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  const inp=document.getElementById('donate-amount');
-  if(val!=='0') inp.value=val; else{inp.value='';inp.focus();}
-}
-
-// ── Load YouTube stream ──
-function loadStream(){
-  document.getElementById('yt-embed').src='https://www.youtube.com/embed/live_stream?channel=UCsankatmochanhanumanmandir1366&autoplay=1';
-  document.getElementById('yt-embed').style.display='block';
-  document.getElementById('stream-placeholder').style.display='none';
-}
-
-// ── Donate button ──
-document.querySelector('.donate-submit').addEventListener('click',()=>{
-  const amt=document.getElementById('donate-amount').value;
-  alert('Thank you for your seva!\n\nPlease send Interac E-Transfer of $'+amt+' CAD to:\ndonatesmhm@gmail.com\n\nOr call 647-334-8491 for other arrangements.\n\nJai Hanuman Ji!');
-});
-</script>
+<script src="scripts/main.js"></script>
 </body>
 </html>
