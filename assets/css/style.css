@@ -322,15 +322,30 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
 .deity-strip { padding:80px 0; background:var(--crimson-dk); }
 .deity-strip-inner { max-width:1200px; margin:0 auto; padding:0 24px; }
 .deity-strip h2 { font-family:'Cinzel',serif; font-size:14px; font-weight:700; letter-spacing:5px; color:var(--gold); text-transform:uppercase; text-align:center; margin-bottom:40px; }
-.deity-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; }
+.deity-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:20px;
+}
 .deity-card {
-  border-radius:var(--r); overflow:hidden; position:relative;
-  aspect-ratio:3/4; cursor:pointer;
+  border-radius:var(--r);
+  overflow:hidden;
+  position:relative;
+  aspect-ratio:3/4;
+  min-height:280px;
+  cursor:pointer;
   border:1px solid rgba(201,168,76,0.2);
   transition:all 0.3s ease;
 }
 .deity-card:hover { transform:translateY(-6px); border-color:var(--gold); }
 .deity-card img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+.deity-card img{
+    transition:transform .4s ease;
+}
+
+.deity-card:hover img{
+    transform:scale(1.05);
+}
 .gallery-overlay{
     position:absolute;
     left:0;
@@ -343,6 +358,12 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
         rgba(0,0,0,.2),
         transparent
     );
+    opacity:0;
+    transition:opacity .3s ease;
+}
+
+.deity-card:hover .gallery-overlay{
+    opacity:1;
 }
 .gallery-overlay h3{
     margin:0 0 8px;
