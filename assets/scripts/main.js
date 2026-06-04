@@ -32,7 +32,15 @@ function loadStream(){
 }
 
 // ── Donate button ──
-document.querySelector('.donate-submit').addEventListener('click',()=>{
-  const amt=document.getElementById('donate-amount').value;
-  alert('Thank you for your seva!\n\nPlease send Interac E-Transfer of $'+amt+' CAD to:\ndonatesmhm@gmail.com\n\nOr call 647-334-8491 for other arrangements.\n\nJai Hanuman Ji!');
-});
+const donateBtn = document.querySelector('.donate-submit');
+
+if (donateBtn) {
+  donateBtn.addEventListener('click', () => {
+    const amt = document.getElementById('donate-amount').value;
+    alert(
+      'Thank you for your seva!\n\nPlease send Interac E-Transfer of $' +
+      amt +
+      ' CAD to:\ndonatesmhm@gmail.com\n\nOr call 647-334-8491.'
+    );
+  });
+}
