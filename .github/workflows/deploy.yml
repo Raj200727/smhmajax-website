@@ -3,7 +3,7 @@ name: Deploy Website to Hostinger
 on:
   push:
     branches:
-      - main   
+      - main   # Change to 'master' if your main branch is named master
 
 jobs:
   web-deploy:
@@ -21,4 +21,4 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
         protocol: ftp
-        server-dir: domains/smhmajax.ca/public_html/
+        server-dir: ./
