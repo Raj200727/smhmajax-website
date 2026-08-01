@@ -125,11 +125,11 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
 .nav-name { font-family:'Cinzel',serif; }
 .nav-name .n1 { font-size:14px; font-weight:700; color:var(--gold-lt); letter-spacing:1px; line-height:1.2; }
 .nav-name .n2 { font-size:10px; color:rgba(245,230,184,0.7); letter-spacing:2px; text-transform:uppercase; }
-.nav-links { display:flex; align-items:center; gap:6px; }
+.nav-links { display:flex; align-items:center; gap:6px; flex-wrap:nowrap; white-space:nowrap; }
 .nav-links a {
-  font-family:'Cinzel',serif; font-size:11px; font-weight:600;
+  font-family:'Cinzel',serif; font-size:10px; font-weight:600;
   letter-spacing:1.5px; text-transform:uppercase;
-  color:rgba(245,230,184,0.8); padding:8px 14px; border-radius:3px;
+  color:rgba(245,230,184,0.8); padding:8px 10px; border-radius:3px;
   text-decoration:none; transition:all 0.2s ease;
 }
 .nav-links a:hover { color:var(--gold-lt); background:rgba(201,168,76,0.12); }
@@ -610,8 +610,12 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
   cursor:pointer;
 }
 .gallery-item img {
-  width:100%; height:100%; object-fit:cover; display:block;
-  transition:transform 0.4s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;  
+  display: block;
+  transition: transform 0.4s ease;
 }
 .gallery-item:hover img { transform:scale(1.04); }
 .gallery-item::after {
@@ -658,6 +662,244 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
 .board-member .email { font-size:12px; color:var(--text-lt); }
 .board-member .email a { color:var(--crimson); text-decoration:none; }
 .board-member .email a:hover { color:var(--crimson-lt); }
+
+/* ═══════════════════════════════════════════
+   NEW TEMPLE PROJECT PAGE
+═══════════════════════════════════════════ */
+
+/* ── HERO ── */
+#temple-hero {
+  position: relative;
+  min-height: 92vh;
+  margin-top: 70px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+/* The image fills the full section behind everything */
+.temple-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* Gradient: strong crimson on the left fading to transparent on the right
+   so the temple image stays fully visible on the right side             */
+.temple-hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(74,0,0,0.92) 0%,
+    rgba(74,0,0,0.75) 38%,
+    rgba(74,0,0,0.25) 62%,
+    rgba(74,0,0,0.0)  100%
+  );
+}
+
+/* Text sits in the left half, above image + gradient */
+.temple-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 560px;
+  padding: 100px 24px 80px 60px;
+}
+
+.temple-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.35);
+  border-radius: 100px;
+  padding: 8px 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.temple-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s infinite;
+}
+
+.temple-hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(36px, 5vw, 68px);
+  font-weight: 900;
+  line-height: 1.0;
+  color: var(--white);
+  margin-bottom: 24px;
+  text-shadow: 2px 4px 20px rgba(0,0,0,0.5);
+}
+
+.temple-hero-title .gold { color: var(--gold-lt); }
+
+.temple-hero-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(17px, 1.6vw, 21px);
+  color: rgba(245,230,184,0.85);
+  line-height: 1.75;
+  margin-bottom: 36px;
+}
+
+.temple-hero-cta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ── WHY SECTION ── */
+#temple-why {
+  padding: 100px 0;
+  background: var(--ivory);
+}
+
+.temple-why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.temple-why-image {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px var(--shadow);
+}
+
+/* ── HOW TO HELP ── */
+#temple-help {
+  padding: 100px 0;
+  background: var(--crimson-dk);
+  position: relative;
+  overflow: hidden;
+}
+
+#temple-help::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23C9A84C' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.temple-help-inner { position: relative; z-index: 1; }
+
+.temple-help-header { text-align: center; margin-bottom: 60px; }
+.temple-help-header .section-label { color: var(--gold); }
+.temple-help-header .section-title { color: var(--gold-pale); }
+.temple-help-header .section-body {
+  color: rgba(245,230,184,0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.temple-ways-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.temple-way-card {
+  background: rgba(245,230,184,0.06);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 12px;
+  padding: 32px 28px;
+  transition: all 0.3s ease;
+}
+
+.temple-way-card:hover {
+  background: rgba(245,230,184,0.1);
+  border-color: var(--gold);
+  transform: translateY(-4px);
+}
+
+.temple-way-icon { font-size: 32px; margin-bottom: 16px; }
+
+.temple-way-card h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  color: var(--gold-lt);
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.temple-way-card p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  color: rgba(245,230,184,0.7);
+  line-height: 1.6;
+}
+
+.temple-way-detail {
+  display: block;
+  margin-top: 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.temple-way-detail:hover { color: var(--gold-lt); }
+
+/* ── CALLOUT ── */
+#temple-callout { padding: 80px 0; background: var(--white); }
+
+.temple-callout-inner {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.temple-callout-inner .section-title { color: var(--crimson-dk); margin-bottom: 20px; }
+.temple-callout-inner .section-body  { margin-bottom: 36px; }
+
+.temple-callout-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .temple-hero-content { padding-left: 32px; }
+  .temple-why-grid { grid-template-columns: 1fr; }
+  .temple-why-image { height: 360px; }
+  .temple-ways-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .temple-hero-content { padding: 100px 20px 60px; max-width: 100%; }
+  .temple-hero-gradient {
+    background: linear-gradient(
+      to right,
+      rgba(74,0,0,0.92) 0%,
+      rgba(74,0,0,0.85) 60%,
+      rgba(74,0,0,0.7)  100%
+    );
+  }
+  .temple-ways-grid { grid-template-columns: 1fr; }
+  .temple-hero-cta { flex-direction: column; }
+  .temple-callout-btns { flex-direction: column; align-items: center; }
+}
 
 /* ═══ FOOTER ═══ */
 footer {
