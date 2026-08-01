@@ -125,11 +125,11 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
 .nav-name { font-family:'Cinzel',serif; }
 .nav-name .n1 { font-size:14px; font-weight:700; color:var(--gold-lt); letter-spacing:1px; line-height:1.2; }
 .nav-name .n2 { font-size:10px; color:rgba(245,230,184,0.7); letter-spacing:2px; text-transform:uppercase; }
-.nav-links { display:flex; align-items:center; gap:6px; flex-wrap:nowrap; white-space:nowrap; }
+.nav-links { display:flex; align-items:center; gap:2px; flex-wrap:nowrap; white-space:nowrap; }
 .nav-links a {
   font-family:'Cinzel',serif; font-size:10px; font-weight:600;
   letter-spacing:1.5px; text-transform:uppercase;
-  color:rgba(245,230,184,0.8); padding:8px 10px; border-radius:3px;
+  color:rgba(245,230,184,0.8); padding:8px 14px; border-radius:3px;
   text-decoration:none; transition:all 0.2s ease;
 }
 .nav-links a:hover { color:var(--gold-lt); background:rgba(201,168,76,0.12); }
@@ -189,7 +189,7 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
   bottom: 0;
   width: 48%; /* Increased from 42% to expand down and right */
   object-fit: cover;
-  object-position: left top;
+  object-position: left bottom;
   mask-image: linear-gradient(to right, black 55%, transparent 98%);
   -webkit-mask-image: linear-gradient(to right, black 55%, transparent 98%);
   opacity: 0.85;
