@@ -107,12 +107,13 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
   transition:all 0.3s ease;
 }
 #nav .nav-inner {
-  max-width:1200px; margin:0 auto; padding:0 24px;
-  display:flex; align-items:center; justify-content:space-between;
-  height:70px;
+  max-width:1400px; margin:0 auto; padding:0 24px;
+  display:flex; align-items:center; justify-content:flex-start;
+  height:70px; gap:0;
 }
 .nav-brand {
   display:flex; align-items:center; gap:14px; text-decoration:none;
+  flex-shrink:0;
 }
 .nav-om {
   width:42px; height:42px; border-radius:50%;
@@ -122,17 +123,23 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
   font-family:'Cinzel',serif; flex-shrink:0;
   box-shadow:0 2px 12px rgba(201,168,76,0.4);
 }
-.nav-name { font-family:'Cinzel',serif; }
-.nav-name .n1 { font-size:14px; font-weight:700; color:var(--gold-lt); letter-spacing:1px; line-height:1.2; }
-.nav-name .n2 { font-size:10px; color:rgba(245,230,184,0.7); letter-spacing:2px; text-transform:uppercase; }
-.nav-links { display:flex; align-items:center; gap:2px; flex-wrap:nowrap; white-space:nowrap; }
+.nav-name { font-family:'Cinzel',serif; white-space:nowrap; }
+.nav-name .n1 { font-size:13px; font-weight:700; color:var(--gold-lt); letter-spacing:1px; line-height:1.2; white-space:nowrap; }
+.nav-name .n2 { font-size:10px; color:rgba(245,230,184,0.7); letter-spacing:2px; text-transform:uppercase; white-space:nowrap; }
+.nav-links {
+  display:flex; align-items:center; flex:1;
+  justify-content:space-between;
+  flex-wrap:nowrap; white-space:nowrap;
+  padding:0 24px;
+}
 .nav-links a {
   font-family:'Cinzel',serif; font-size:10px; font-weight:600;
-  letter-spacing:1.5px; text-transform:uppercase;
-  color:rgba(245,230,184,0.8); padding:8px 14px; border-radius:3px;
-  text-decoration:none; transition:all 0.2s ease;
+  letter-spacing:1px; text-transform:uppercase;
+  color:rgba(245,230,184,0.8); padding:8px 6px; border-radius:3px;
+  text-decoration:none; transition:all 0.2s ease; white-space:nowrap;
 }
 .nav-links a:hover { color:var(--gold-lt); background:rgba(201,168,76,0.12); }
+.nav-links a.nav-active { color:var(--gold-lt); background:rgba(201,168,76,0.14); }
 .nav-donate {
   font-family:'Cinzel',serif; font-size:11px; font-weight:700;
   letter-spacing:1.5px; text-transform:uppercase;
@@ -878,6 +885,7 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
   flex-wrap: wrap;
 }
 
+
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   .temple-hero-content { padding-left: 32px; }
@@ -899,6 +907,401 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
   .temple-ways-grid { grid-template-columns: 1fr; }
   .temple-hero-cta { flex-direction: column; }
   .temple-callout-btns { flex-direction: column; align-items: center; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GLOBAL NAV UPDATE
+   Add these rules to your existing nav block in style.css
+   ═══════════════════════════════════════════════════════════ */
+
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   BOOKINGS PAGE — append everything below to style.css
+   All class names are prefixed .booking- or .samskar- / .puja- / .occasion-
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Hero ── */
+.booking-hero {
+  background: var(--crimson-dk);
+  padding: 120px 24px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid rgba(201,168,76,0.25);
+}
+.booking-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(160,21,21,0.5) 0%, rgba(74,0,0,0.9) 100%);
+  pointer-events: none;
+}
+.booking-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.booking-hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(32px, 5vw, 62px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.05;
+  margin: 12px 0 8px;
+  text-shadow: 2px 4px 20px rgba(0,0,0,0.4);
+}
+.booking-hero-pandit {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 2.5vw, 26px);
+  color: var(--gold-lt);
+  font-style: italic;
+  margin-bottom: 8px;
+}
+.booking-hero-pandit strong {
+  font-style: normal;
+  font-weight: 700;
+}
+.booking-hero-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(15px, 2vw, 20px);
+  color: rgba(245,230,184,0.65);
+  margin-bottom: 40px;
+}
+.booking-hero-ctas {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.booking-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--crimson-dk);
+  padding: 14px 28px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.booking-cta-primary:hover { background: var(--gold-lt); transform: translateY(-2px); }
+.booking-cta-phone,
+.booking-cta-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: 1px solid rgba(201,168,76,0.4);
+  color: var(--gold-lt);
+  padding: 14px 22px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.booking-cta-phone:hover,
+.booking-cta-whatsapp:hover {
+  background: rgba(201,168,76,0.12);
+  border-color: var(--gold);
+}
+
+/* ── Main Section ── */
+.booking-section {
+  background: var(--cream, #fdf7ee);
+  padding: 80px 24px 100px;
+}
+.booking-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Intro Banner ── */
+.booking-intro-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: rgba(74,0,0,0.06);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-left: 4px solid var(--gold);
+  border-radius: 4px;
+  padding: 24px 28px;
+  margin-bottom: 56px;
+}
+.booking-intro-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+.booking-intro-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--crimson-dk);
+  line-height: 1.6;
+  margin: 0 0 10px;
+}
+.booking-inline-link {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--crimson-dk);
+  text-decoration: none;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(74,0,0,0.3);
+  padding-bottom: 1px;
+  transition: border-color 0.2s;
+}
+.booking-inline-link:hover { border-color: var(--crimson-dk); }
+
+/* ── 3-Column Grid ── */
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-bottom: 56px;
+}
+@media (max-width: 900px) {
+  .booking-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Cards ── */
+.booking-card {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 20px rgba(74,0,0,0.08);
+  border: 1px solid rgba(201,168,76,0.15);
+  display: flex;
+  flex-direction: column;
+}
+.booking-card-header {
+  background: var(--crimson-dk);
+  padding: 28px 24px 22px;
+  text-align: center;
+}
+.booking-card-icon { font-size: 32px; display: block; margin-bottom: 10px; }
+.booking-card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--gold-lt);
+  margin: 0 0 4px;
+  letter-spacing: 0.5px;
+}
+.booking-card-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: rgba(245,230,184,0.6);
+  margin: 0;
+}
+
+/* Column 1: Numbered samskar list */
+.samskar-list {
+  list-style: none;
+  padding: 20px 24px;
+  margin: 0;
+  flex: 1;
+  counter-reset: samskar;
+}
+.samskar-list li {
+  counter-increment: samskar;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  font-family: 'Nunito', sans-serif;
+  font-size: 13.5px;
+}
+.samskar-list li:last-child { border-bottom: none; }
+.samskar-list li::before {
+  content: counter(samskar) ".";
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 700;
+  flex-shrink: 0;
+  width: 20px;
+}
+.samskar-name {
+  color: var(--crimson-dk);
+  font-weight: 700;
+  flex: 1;
+}
+.samskar-meaning {
+  color: rgba(74,0,0,0.45);
+  font-size: 12px;
+  font-style: italic;
+  text-align: right;
+}
+
+/* Column 2: Puja checkmark list */
+.puja-list {
+  list-style: none;
+  padding: 24px 24px 16px;
+  margin: 0;
+  flex: 1;
+}
+.puja-list li {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  color: var(--crimson-dk);
+  padding: 9px 0 9px 30px;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  position: relative;
+  line-height: 1.4;
+}
+.puja-list li:last-child { border-bottom: none; }
+.puja-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  color: var(--gold);
+  font-weight: 900;
+  font-size: 13px;
+}
+.booking-card-divider {
+  height: 1px;
+  background: rgba(201,168,76,0.2);
+  margin: 0 24px;
+}
+.booking-card-note {
+  padding: 16px 24px 24px;
+}
+.booking-card-note p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: rgba(74,0,0,0.55);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Column 3: Occasion emoji list */
+.occasion-list {
+  list-style: none;
+  padding: 20px 24px;
+  margin: 0;
+  flex: 1;
+}
+.occasion-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  font-family: 'Nunito', sans-serif;
+  font-size: 13.5px;
+  color: var(--crimson-dk);
+  line-height: 1.4;
+}
+.occasion-list li:last-child { border-bottom: none; }
+.occasion-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── Bottom Banner ── */
+.booking-bottom-banner {
+  background: var(--crimson-dk);
+  border-radius: 6px;
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 30px rgba(74,0,0,0.2);
+}
+.booking-pandit-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.booking-pandit-avatar {
+  font-size: 48px;
+  width: 72px;
+  height: 72px;
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.booking-pandit-name {
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold-lt);
+  margin: 0 0 4px;
+}
+.booking-pandit-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: rgba(245,230,184,0.65);
+  margin: 0 0 6px;
+}
+.booking-pandit-blessing {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin: 0;
+}
+.booking-contact-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.booking-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.booking-contact-call {
+  background: transparent;
+  border: 1px solid rgba(201,168,76,0.5);
+  color: var(--gold-lt);
+}
+.booking-contact-call:hover { background: rgba(201,168,76,0.12); border-color: var(--gold); }
+.booking-contact-wa {
+  background: #25D366;
+  color: #fff;
+  border: 1px solid #25D366;
+}
+.booking-contact-wa:hover { background: #1ebe5a; }
+.booking-contact-book {
+  background: var(--gold);
+  color: var(--crimson-dk);
+  border: 1px solid var(--gold);
+}
+.booking-contact-book:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+@media (max-width: 768px) {
+  .booking-bottom-banner { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  .booking-contact-actions { width: 100%; }
+  .booking-contact-btn { flex: 1; justify-content: center; }
+  .booking-intro-banner { flex-direction: column; gap: 12px; }
 }
 
 /* ═══ FOOTER ═══ */
