@@ -695,7 +695,7 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
 }
 
 /* Gradient: strong crimson on the left fading to transparent on the right
-   so the temple image stays fully visible on the right side             */
+   so the temple image stays fully visible on the right side */
 .temple-hero-gradient {
   position: absolute;
   inset: 0;
@@ -885,7 +885,6 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
   flex-wrap: wrap;
 }
 
-
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   .temple-hero-content { padding-left: 32px; }
@@ -910,16 +909,7 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   GLOBAL NAV UPDATE
-   Add these rules to your existing nav block in style.css
-   ═══════════════════════════════════════════════════════════ */
-
-
-
-
-/* ═══════════════════════════════════════════════════════════
-   BOOKINGS PAGE — append everything below to style.css
-   All class names are prefixed .booking- or .samskar- / .puja- / .occasion-
+   BOOKINGS PAGE
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Hero ── */
@@ -1018,7 +1008,7 @@ h4,h5      { font-family:'Cormorant Garamond',serif; font-weight:600; }
 
 /* ── Main Section ── */
 .booking-section {
-  background: var(--cream, #fdf7ee);
+  background: #fdf7ee;
   padding: 80px 24px 100px;
 }
 .booking-container {
