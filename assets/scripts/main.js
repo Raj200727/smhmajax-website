@@ -44,27 +44,40 @@ if (donateBtn) {
     );
   });
 }
-// ── POSTER SLIDER (EVENTS PAGE) ──
+// ── POSTER SLIDER (MANUAL & AUTOMATIC) ──
 let currentSlide = 0;
+let slideTimer; 
 
 function moveSlide(direction) {
   const track = document.getElementById('sliderTrack');
-  
-  // Safety check: If the slider doesn't exist on this page, do nothing
+
   if (!track) return; 
   
   const totalSlides = track.querySelectorAll('img').length;
   currentSlide += direction;
-  
-  // Loop back to the end if clicking left on the first image
+
   if (currentSlide < 0) {
     currentSlide = totalSlides - 1;
   } 
-  // Loop back to the start if clicking right on the last image
   else if (currentSlide >= totalSlides) {
     currentSlide = 0;
   }
 
-  // Move the track sideways based on which slide we are on
   track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  
+  startSlideTimer();
 }
+
+function startSlideTimer() {
+  const track = document.getElementById('sliderTrack');
+  if (!track) return; 
+
+  clearInterval(slideTimer);
+
+  slideTimer = setInterval(() => {
+    moveSlide(1);
+  }, 4000);
+}
+
+// Start the automatic timer as soon as the page loads
+document.addEventListener("DOMContentLoaded", startSlideTimer);
