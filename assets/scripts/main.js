@@ -80,4 +80,8 @@ function startSlideTimer() {
 }
 
 // Start the automatic timer as soon as the page loads
-document.addEventListener("DOMContentLoaded", startSlideTimer);
+if (document.readyState === 'loading') {
+  document.addEventListener("DOMContentLoaded", startSlideTimer);
+} else {
+  startSlideTimer();
+}
