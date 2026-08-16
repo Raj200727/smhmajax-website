@@ -85,3 +85,28 @@ if (document.readyState === 'loading') {
 } else {
   startSlideTimer();
 }
+  function filterGallery(year) {
+    // 1. Update active styling on the buttons
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+      btn.classList.remove('active');
+      // If the button's onclick attribute matches the clicked year, make it active
+      if(btn.getAttribute('onclick').includes(year)) {
+        btn.classList.add('active');
+      }
+    });
+
+    // 2. Show or Hide the Year Sections
+    const yearSections = document.querySelectorAll('.year-section');
+    yearSections.forEach(section => {
+      if (year === 'all') {
+        section.style.display = 'block'; // Show all
+      } else {
+        if (section.getAttribute('data-year') === year) {
+          section.style.display = 'block'; // Show matching year
+        } else {
+          section.style.display = 'none'; // Hide other years
+        }
+      }
+    });
+  }
