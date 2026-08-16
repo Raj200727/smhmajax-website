@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sponsor a Seva — Sankat Mochan Hanuman Mandir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://www.paypal.com/sdk/js?client-id=AcjSEkU4dVsH0fFDu6YkC4afPOhA3Ho0e1iwDeD5QX5KRCwhTPhzG-WbpraEHNRJpGmkv6294ySsWHpK&currency=CAD&intent=capture&components=buttons"></script>
+<style>
+  /* ═══════════════════════════════════════════
+     BOOKINGS PAGE — calendar & booking grid
+     Scoped to .booking- prefix; does not
+     override global style.css rules.
+  ═══════════════════════════════════════════ */
+
+  /* ── Page wrapper sits below fixed nav ── */
+  #bookings-page {
+    padding-top: 70px;
+    background: #f8f6f1;
+    min-height: 100vh;
+  }
+
+  /* ── Hero banner ── */
+  .booking-page-hero {
+    background: var(--crimson-dk);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid rgba(201,168,76,0.25);
+  }
+  .booking-page-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(160,21,21,0.5) 0%, rgba(74,0,0,0.9) 100%);
+    pointer-events: none;
+  }
+  .booking-page-hero-inner {
+    position: relative; z-index: 1;
+    max-width: 700px; margin: 0 auto;
+  }
+  .booking-page-hero h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 12px;
+    text-shadow: 2px 4px 20px rgba(0,0,0,0.4);
+  }
+  .booking-page-hero p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 2vw, 22px);
+    color: rgba(245,230,184,0.75);
+    line-height: 1.6;
+  }
+
+  /* ── Calendar container ── */
+  .booking-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px 100px;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+    margin: 16px 0 10px; font-size: 0.85rem;
+    font-family: 'Nunito', sans-serif;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dot.avail  { background: #2e7d32; }
+  .dot.sel    { background: var(--gold); }
+  .dot.booked { background: #bdbdbd; }
+
+  /* ── Month nav ── */
+  .cal-nav {
+    display: flex; justify-content: center; align-items: center; gap: 24px;
+    margin: 18px 0 14px;
+  }
+  .cal-nav button {
+    background: var(--crimson-dk); color: var(--gold-pale);
+    border: 1px solid rgba(201,168,76,0.3);
+    width: 40px; height: 40px; border-radius: 8px;
+    cursor: pointer; font-size: 1.1rem; transition: all 0.2s;
+    font-family: 'Cinzel', serif;
+  }
+  .cal-nav button:hover { background: var(--crimson); border-color: var(--gold); }
+  .cal-nav h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem; min-width: 200px;
+    text-align: center; color: var(--crimson-dk);
+  }
+
+  /* ── Day-of-week labels ── */
+  .weekdays {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+    text-align: center; font-weight: 700; font-size: 0.78rem;
+    color: var(--crimson); margin-bottom: 6px; text-transform: uppercase;
+    font-family: 'Cinzel', serif; letter-spacing: 1px;
+  }
+
+  /* ── Calendar grid ── */
+  .calendar-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+  }
+  .day-cell {
+    background: #fff; border-radius: 8px; padding: 8px; min-height: 140px;
+    border: 1px solid #e0ddd5; display: flex; flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.15s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .day-cell:hover { box-shadow: 0 4px 14px rgba(74,0,0,0.1); }
+  .day-cell.past { opacity: 0.42; pointer-events: none; }
+  .day-cell.today { border-color: var(--gold); border-width: 2px; }
+  .day-cell.festival { border-color: var(--gold); background: #fffdf5; }
+  .day-num { font-weight: 700; font-size: 1rem; color: var(--crimson-dk); margin-bottom: 4px; }
+  .pooja-text { font-size: 0.67rem; color: #777; line-height: 1.3; margin-bottom: 6px; flex-shrink: 0; }
+
+  /* ── Seva buttons inside each day ── */
+  .item-btn {
+    font-size: 0.72rem; padding: 4px 6px; border-radius: 5px;
+    border: 1px solid #c8e6c9; background: #e8f5e9; color: #1b5e20;
+    cursor: pointer; margin-bottom: 4px; text-align: left;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.15s; font-family: 'Nunito', sans-serif;
+  }
+  .item-btn:hover { background: #c8e6c9; }
+  .item-btn.booked {
+    background: #eeeeee; color: #9e9e9e; border-color: #e0e0e0;
+    text-decoration: line-through; cursor: not-allowed; pointer-events: none;
+  }
+  .item-btn.in-cart { background: #fff8e1; border-color: var(--gold); color: #b45309; }
+
+  /* ── Full day button ── */
+  .full-day-btn {
+    font-size: 0.72rem; padding: 5px; border-radius: 5px; border: none;
+    background: var(--crimson-dk); color: var(--gold-pale);
+    cursor: pointer; margin-top: auto; text-align: center;
+    transition: opacity 0.15s; font-family: 'Cinzel', serif; letter-spacing: 0.5px;
+  }
+  .full-day-btn:hover { opacity: 0.85; }
+  .full-day-btn:disabled { background: #bdbdbd; cursor: not-allowed; }
+
+  .fully-booked {
+    font-size: 0.75rem; color: #9e9e9e; text-align: center; margin-top: auto;
+    font-style: italic; font-family: 'Cormorant Garamond', serif;
+  }
+
+  .festival-badge {
+    font-size: 0.63rem; background: var(--gold); color: var(--crimson-dk);
+    padding: 2px 6px; border-radius: 4px; display: inline-block;
+    margin-bottom: 4px; font-weight: 700; font-family: 'Cinzel', serif;
+  }
+
+  /* ── Sticky cart bar ── */
+  .cart-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--crimson-dk);
+    border-top: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-pale); padding: 14px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 500; transform: translateY(100%); transition: transform 0.3s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .cart-bar.show { transform: translateY(0); }
+  .cart-bar .cart-info { font-size: 0.95rem; font-weight: 600; }
+  .cart-bar .cart-actions { display: flex; gap: 10px; }
+  .cart-bar button {
+    padding: 9px 20px; border-radius: 6px; border: none;
+    cursor: pointer; font-size: 0.85rem; font-family: 'Cinzel', serif;
+    font-weight: 700; letter-spacing: 0.5px;
+  }
+  .btn-clear {
+    background: transparent; color: var(--gold-pale);
+    border: 1px solid rgba(201,168,76,0.4) !important;
+  }
+  .btn-clear:hover { background: rgba(201,168,76,0.1); }
+  .btn-checkout { background: var(--gold); color: var(--crimson-dk); }
+  .btn-checkout:hover { background: var(--gold-lt); }
+
+  /* ── Checkout modal ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 600;
+    display: none; justify-content: center; align-items: center; padding: 16px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #fff; border-radius: 12px; max-width: 480px; width: 100%;
+    max-height: 90vh; overflow-y: auto; padding: 28px; position: relative;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+  }
+  .modal h3 {
+    font-family: 'Cinzel', serif; font-size: 1.2rem;
+    margin-bottom: 16px; color: var(--crimson-dk);
+  }
+  .modal-close {
+    position: absolute; top: 14px; right: 16px;
+    background: none; border: none; font-size: 1.5rem;
+    cursor: pointer; color: #999; line-height: 1;
+  }
+  .modal-close:hover { color: var(--crimson); }
+
+  /* ── Form fields ── */
+  .form-group { margin-bottom: 14px; }
+  .form-group label {
+    display: block; font-size: 0.85rem; font-weight: 700;
+    margin-bottom: 4px; color: var(--crimson-dk);
+    font-family: 'Cinzel', serif; letter-spacing: 0.5px;
+  }
+  .form-group input {
+    width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px;
+    font-size: 0.95rem; font-family: 'Nunito', sans-serif;
+  }
+  .form-group input:focus { outline: none; border-color: var(--crimson); }
+  .form-group input:disabled { background: #f5f5f5; color: #666; cursor: not-allowed; }
+
+  /* ── Cart summary in modal ── */
+  .cart-summary {
+    background: var(--ivory); border-radius: 8px; padding: 14px;
+    margin: 14px 0; border: 1px solid var(--ivory-dk);
+  }
+  .cart-summary h4 {
+    font-family: 'Cinzel', serif; font-size: 0.9rem;
+    margin-bottom: 10px; color: var(--crimson-dk);
+  }
+  .cart-item {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid #e0e0e0;
+    font-family: 'Nunito', sans-serif;
+  }
+  .cart-item:last-child { border-bottom: none; }
+  .cart-item .remove { color: #c62828; cursor: pointer; font-size: 0.75rem; margin-left: 8px; }
+  .cart-item .remove.hidden { display: none; }
+  .cart-total {
+    font-weight: 700; font-size: 1rem; text-align: right; margin-top: 8px;
+    color: var(--crimson-dk); font-family: 'Cinzel', serif;
+  }
+
+  /* ── Banners ── */
+  .error-banner {
+    background: #ffebee; color: #c62828; padding: 10px 14px; border-radius: 6px;
+    font-size: 0.85rem; margin-bottom: 12px; display: none;
+    font-family: 'Nunito', sans-serif;
+  }
+  .error-banner.show { display: block; }
+  .success-banner {
+    background: #e8f5e9; color: #2e7d32; padding: 10px 14px; border-radius: 6px;
+    font-size: 0.85rem; margin-bottom: 12px; display: none;
+    font-family: 'Nunito', sans-serif;
+  }
+  .success-banner.show { display: block; }
+
+  /* ── PayPal & done button ── */
+  #paypal-button-container { margin-top: 16px; min-height: 45px; }
+  #paypal-button-container.hidden { display: none; }
+  .done-btn {
+    width: 100%; padding: 13px; background: var(--crimson-dk); color: var(--gold-pale);
+    border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; margin-top: 16px; transition: opacity 0.2s;
+    font-family: 'Cinzel', serif; letter-spacing: 1px;
+  }
+  .done-btn:hover { opacity: 0.88; }
+  .done-btn.hidden { display: none; }
+
+  /* ── Sync status ── */
+  .sync-status {
+    text-align: center; font-size: 0.75rem; color: #888; margin-top: 16px;
+    padding-bottom: 80px; font-family: 'Nunito', sans-serif;
+  }
+  .sync-status.error { color: #c62828; }
+  .refresh-btn {
+    background: var(--crimson-dk); color: var(--gold-pale); border: none;
+    padding: 6px 14px; border-radius: 5px; cursor: pointer;
+    font-size: 0.75rem; margin-left: 10px; font-family: 'Cinzel', serif;
+  }
+  .refresh-btn:hover { background: var(--crimson); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .calendar-grid { gap: 4px; }
+    .day-cell { min-height: 110px; padding: 5px; }
+    .item-btn, .full-day-btn { font-size: 0.63rem; padding: 3px 4px; }
+    .pooja-text { font-size: 0.58rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <img src="assets/images/mandir-icon.jpeg" class="nav-logo-img" alt="Mandir Logo">
+      <div class="nav-name">
+        <div class="n1">Sankat Mochan Hanuman Mandir</div>
+        <div class="n2">Ajax, Ontario · Est. 2011</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="about.html">About</a>
+      <a href="deities.html">Our Deities</a>
+      <a href="events.html">Events</a>
+      <a href="livestream.html">Livestream</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+      <a href="new-temple-project.html">New Temple</a>
+      <a href="bookings.html" class="nav-active">Pujas &amp; Bookings</a>
+    </div>
+    <a href="donate.html" class="nav-donate">Donate</a>
+    <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div id="mobile-menu">
+    <a href="about.html" onclick="toggleMenu()">About</a>
+    <a href="deities.html" onclick="toggleMenu()">Our Deities</a>
+    <a href="events.html" onclick="toggleMenu()">Events</a>
+    <a href="livestream.html" onclick="toggleMenu()">Livestream</a>
+    <a href="gallery.html" onclick="toggleMenu()">Gallery</a>
+    <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    <a href="new-temple-project.html" onclick="toggleMenu()">New Temple</a>
+    <a href="bookings.html" onclick="toggleMenu()">Pujas &amp; Bookings</a>
+    <a href="donate.html" onclick="toggleMenu()">Donate</a>
+  </div>
+</nav>
+
+<!-- ═══ BOOKINGS PAGE ═══ -->
+<div id="bookings-page">
+
+  <!-- Hero banner -->
+  <div class="booking-page-hero">
+    <div class="booking-page-hero-inner">
+      <span class="section-label" style="color:var(--gold);margin-bottom:14px">Seva Sponsorship</span>
+      <h1>Sponsor a Seva</h1>
+      <p>Book Archana, Mala, Vastra &amp; Priti Bhoj sponsorships<br>at Sankat Mochan Hanuman Mandir, Ajax</p>
+    </div>
+  </div>
+
+  <!-- Calendar -->
+  <div class="booking-wrap">
+    <div class="legend">
+      <span><span class="dot avail"></span> Available</span>
+      <span><span class="dot sel"></span> Selected</span>
+      <span><span class="dot booked"></span> Already booked</span>
+    </div>
+
+    <div class="cal-nav">
+      <button id="prevMonth">&#10094;</button>
+      <h2 id="monthYear">August 2026</h2>
+      <button id="nextMonth">&#10095;</button>
+    </div>
+
+    <div class="weekdays">
+      <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div>
+      <div>Thu</div><div>Fri</div><div>Sat</div>
+    </div>
+    <div class="calendar-grid" id="calendar"></div>
+
+    <div class="sync-status" id="syncStatus">Loading...
+      <button class="refresh-btn" onclick="forceRefresh()">Refresh Now</button>
+    </div>
+  </div>
+
+</div><!-- /#bookings-page -->
+
+<!-- ── Sticky cart bar ── -->
+<div class="cart-bar" id="cartBar">
+  <div class="cart-info" id="cartInfo">0 items — $0</div>
+  <div class="cart-actions">
+    <button class="btn-clear" onclick="clearCart()">Clear</button>
+    <button class="btn-checkout" onclick="openCheckout()">Checkout</button>
+  </div>
+</div>
+
+<!-- ── Checkout modal ── -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCheckout()">&times;</button>
+    <h3>Complete Your Sponsorship</h3>
+    <div class="error-banner" id="errorBanner"></div>
+    <div class="success-banner" id="successBanner"></div>
+    <div class="cart-summary" id="cartSummary"></div>
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="devName" placeholder="Enter your full name">
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="devPhone" placeholder="e.g. 647-555-1234">
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="devEmail" placeholder="your@email.com">
+    </div>
+    <div id="paypal-button-container"></div>
+    <button class="done-btn hidden" id="doneBtn" onclick="closeCheckout()">Done — Close Window</button>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <img src="assets/images/mandir-icon.jpeg" alt="Mandir Logo"
+               style="width:36px;height:36px;object-fit:cover;border-radius:50%;flex-shrink:0;">
+          <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold-pale);font-weight:700">
+            Sankat Mochan<br>Hanuman Mandir
+          </div>
+        </div>
+        <p>A sacred home for the Hindu diaspora of Ajax &amp; Durham Region. 100% volunteer-run since 2011.</p>
+        <p style="margin-top:10px">📍 Ajax, Ontario · <a href="http://smhmajax.ca" style="color:var(--gold);text-decoration:none">smhmajax.ca</a></p>
+        <p style="margin-top:14px;font-size:11px;color:rgba(245,230,184,0.35);line-height:1.6;text-transform:uppercase;letter-spacing:0.5px">
+          SMHM is a Registered Non-Profit<br>
+          Sankat Mochan Hanuman Mandir &amp; Cultural Centre Inc. is a registered non-profit organization. All donations support temple operations directly.<br>
+          <span style="color:rgba(245,230,184,0.5)">Charity Registration Number: [INSERT CRA NUMBER HERE]</span>
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Temple</h4>
+        <a href="about.html">About Us</a>
+        <a href="events.html">Events &amp; Schedule</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Seva</h4>
+        <a href="donate.html">Make a Donation</a>
+        <a href="bookings.html">Book a Puja</a>
+        <a href="mailto:seva@smhmajax.ca">Volunteer</a>
+        <a href="mailto:info@smhmajax.ca">General Inquiry</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="https://www.youtube.com/@sankatmochanhanumanmandir1366" target="_blank">YouTube Channel</a>
+        <a href="https://www.instagram.com/sankatmochanhanumanmandirajax?igsh=ZnNmdzQ3bzA4bWYw">Instagram</a>
+        <a href="https://www.tiktok.com/@sankatmochan11?_t=8jdVU6kzySL&_r=1">TikTok</a>
+        <a href="tel:6473348491">647-334-8491</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sankat Mochan Hanuman Mandir &amp; Cultural Centre Inc. · Ajax, Ontario · Registered Non-Profit</span>
+      <span>
+        <a href="mailto:info@smhmajax.ca">info@smhmajax.ca</a> &nbsp;·&nbsp;
+        <a href="mailto:donations@smhmajax.ca">donations@smhmajax.ca</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ ALL ORIGINAL JS — UNTOUCHED ═══ -->
+<script>
+// ========== CONFIGURATION ==========
+var GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxh0IslqiLvZBwQmPT0SeFJbPta2MnB5PZK-SrRYssmF2fapK9RisXbxl3VgXBKmnGp/exec";
+var SECRET_TOKEN = "05DjNwOYrNf9RDXqb-j5fw";
+
+// ========== STATE ==========
+var currentDate = new Date(2026, 7, 1);
+var cart = [];
+var bookedSet = new Set();
+var itemsConfig = [];
+var festivals = {};
+var weeklyPujas = {};
+var isLoading = false;
+var lastSyncTime = null;
+var jsonpCounter = 0;
+var activeJsonp = {};
+var paymentComplete = false;
+
+// ========== DEFAULTS ==========
+var DEFAULT_ITEMS = [
+  { id: "archana", name: "Daily Archana", price: 21, description: "Daily flower archana for selected deity", active: true },
+  { id: "mala", name: "Morning Mala", price: 31, description: "Morning mala offering & sankalpam", active: true },
+  { id: "vastra", name: "Vastra Seva", price: 51, description: "New vastra offering to deity", active: true },
+  { id: "pritibhoj_basic", name: "Priti Bhoj — Basic", price: 280, description: "Chole or Rajma or Dal Makhni & Jeera rice", active: true },
+  { id: "pritibhoj_mid", name: "Priti Bhoj — Mid", price: 400, description: "1 sabzi, 1 Naan, 1 Veg Biryani", active: true },
+  { id: "pritibhoj_premium", name: "Priti Bhoj — Premium", price: 530, description: "2 sabzi, 1 Naan, 1 Veg Biryani", active: true }
+];
+var DEFAULT_FESTIVALS = {
+  "2026-08-11": "Raksha Bandhan",
+  "2026-08-15": "Independence Day / Special Abhishek",
+  "2026-08-19": "Krishna Janmashtami",
+  "2026-08-25": "Ganesh Chaturthi",
+  "2026-09-05": "Teachers Day Special Puja"
+};
+var DEFAULT_WEEKLY = {
+  0: "Sarvdev Puja, Rudrabhishek & Katha · Sandhya Arti",
+  1: "Shivji Puja & Rudrabhishek",
+  2: "Hanumanji Puja, Abhishek & Katha",
+  3: "Sandhya Arti",
+  4: "Sandhya Arti",
+  5: "Durga Ma Puja, Abhishek & Durga Saptashati Path",
+  6: "Rudrabhishek, Navagrah Puja & Abhishek · Sandhya Arti"
+};
+
+// ========== JSONP ==========
+function jsonpRequest(url, timeoutMs) {
+  return new Promise(function(resolve, reject) {
+    var cbName = "_smhm_cb_" + (++jsonpCounter);
+    var script = document.createElement("script");
+    var timer = null;
+    var resolved = false;
+
+    function cleanup() {
+      if (timer) { clearTimeout(timer); timer = null; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+      setTimeout(function() {
+        try { delete window[cbName]; } catch(e){}
+        delete activeJsonp[cbName];
+      }, 10000);
+    }
+
+    window[cbName] = function(data) {
+      if (resolved) return;
+      resolved = true;
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror = function() {
+      if (resolved) return;
+      resolved = true;
+      cleanup();
+      reject(new Error("JSONP script load error"));
+    };
+
+    var sep = url.indexOf("?") >= 0 ? "&" : "?";
+    script.src = url + sep + "callback=" + cbName;
+    document.head.appendChild(script);
+    activeJsonp[cbName] = true;
+
+    timer = setTimeout(function() {
+      if (resolved) return;
+      resolved = true;
+      cleanup();
+      reject(new Error("JSONP timeout"));
+    }, timeoutMs || 25000);
+  });
+}
+
+// ========== DATE PARSING ==========
+function normalizeDate(input) {
+  if (!input) return null;
+  if (typeof input === "string" && /^\d{4}-\d{2}-\d{2}$/.test(input.trim())) {
+    return input.trim();
+  }
+  if (typeof input === "string" && input.length >= 10) {
+    var m = input.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return m[1] + "-" + m[2] + "-" + m[3];
+  }
+  if (input instanceof Date && !isNaN(input.getTime())) {
+    var y = input.getFullYear();
+    var mo = String(input.getMonth() + 1).padStart(2, "0");
+    var d = String(input.getDate()).padStart(2, "0");
+    return y + "-" + mo + "-" + d;
+  }
+  var parsed = new Date(input);
+  if (!isNaN(parsed.getTime())) {
+    var py = parsed.getFullYear();
+    var pmo = String(parsed.getMonth() + 1).padStart(2, "0");
+    var pd = String(parsed.getDate()).padStart(2, "0");
+    return py + "-" + pmo + "-" + pd;
+  }
+  return null;
+}
+
+function extractDate(b) {
+  if (!b) return null;
+  if (typeof b === "object") {
+    if (b.date !== undefined) return normalizeDate(b.date);
+    if (b["Booking Date"] !== undefined) return normalizeDate(b["Booking Date"]);
+    if (b[0] !== undefined) return normalizeDate(b[0]);
+  }
+  return normalizeDate(b);
+}
+
+function extractItem(b) {
+  if (!b) return null;
+  if (typeof b === "object") {
+    if (b.item !== undefined) return String(b.item).trim();
+    if (b["Item ID"] !== undefined) return String(b["Item ID"]).trim();
+    if (b[1] !== undefined) return String(b[1]).trim();
+  }
+  return null;
+}
+
+// ========== LOAD FROM SHEET ==========
+function loadFromSheet() {
+  if (isLoading) {
+    console.log("Load already in progress, skipping");
+    return Promise.resolve();
+  }
+  isLoading = true;
+  updateSyncStatus(false, "Syncing...");
+
+  var url = GAS_WEB_APP_URL + "?action=getAll&token=" + encodeURIComponent(SECRET_TOKEN);
+
+  return jsonpRequest(url, 30000).then(function(data) {
+    isLoading = false;
+    if (data && data.success) {
+      if (data.items && data.items.length) itemsConfig = data.items;
+      else itemsConfig = DEFAULT_ITEMS;
+
+      if (data.festivals) festivals = data.festivals;
+      else festivals = DEFAULT_FESTIVALS;
+
+      if (data.weeklyPujas) weeklyPujas = data.weeklyPujas;
+      else weeklyPujas = DEFAULT_WEEKLY;
+
+      var newSet = new Set();
+      if (data.bookings && Array.isArray(data.bookings)) {
+        data.bookings.forEach(function(b) {
+          var d = extractDate(b);
+          var itm = extractItem(b);
+          if (d && itm) {
+            newSet.add(d + "_" + itm);
+          }
+        });
+      }
+      bookedSet = newSet;
+      lastSyncTime = new Date();
+      updateSyncStatus(false, "Last synced: " + lastSyncTime.toLocaleTimeString());
+      renderCalendar();
+      console.log("Synced", bookedSet.size, "booked slots");
+    } else {
+      updateSyncStatus(true, "Sync warning: " + (data && data.error ? data.error : "unknown"));
+    }
+  }).catch(function(err) {
+    isLoading = false;
+    console.log("Sheet sync failed:", err.message);
+    updateSyncStatus(true, "Sync failed (using cached data). Will retry...");
+  });
+}
+
+function updateSyncStatus(isError, msg) {
+  var el = document.getElementById("syncStatus");
+  if (!el) return;
+  var btn = '<button class="refresh-btn" onclick="forceRefresh()">Refresh Now</button>';
+  el.innerHTML = (msg || (lastSyncTime ? "Last synced: " + lastSyncTime.toLocaleTimeString() : "Loading...")) + btn;
+  el.className = "sync-status" + (isError ? " error" : "");
+}
+
+function forceRefresh() {
+  loadFromSheet();
+}
+
+// ========== CALENDAR ==========
+function renderCalendar() {
+  var cal = document.getElementById("calendar");
+  var monthYear = document.getElementById("monthYear");
+  if (!cal || !monthYear) return;
+
+  var year = currentDate.getFullYear();
+  var month = currentDate.getMonth();
+  monthYear.textContent = new Date(year, month, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+  var firstDay = new Date(year, month, 1).getDay();
+  var daysInMonth = new Date(year, month + 1, 0).getDate();
+  var today = new Date();
+  var todayStr = fmtDate(today);
+
+  cal.innerHTML = "";
+
+  for (var i = 0; i < firstDay; i++) {
+    cal.appendChild(document.createElement("div"));
+  }
+
+  for (var d = 1; d <= daysInMonth; d++) {
+    var dateStr = fmtDate(new Date(year, month, d));
+    var dayOfWeek = new Date(year, month, d).getDay();
+    var cell = document.createElement("div");
+    cell.className = "day-cell";
+    if (dateStr < todayStr) cell.classList.add("past");
+    if (dateStr === todayStr) cell.classList.add("today");
+    if (festivals[dateStr]) {
+      cell.classList.add("festival");
+      var badge = document.createElement("span");
+      badge.className = "festival-badge";
+      badge.textContent = festivals[dateStr];
+      cell.appendChild(badge);
+    }
+
+    var num = document.createElement("div");
+    num.className = "day-num";
+    num.textContent = d;
+    cell.appendChild(num);
+
+    var pooja = document.createElement("div");
+    pooja.className = "pooja-text";
+    pooja.textContent = weeklyPujas[dayOfWeek] || "";
+    cell.appendChild(pooja);
+
+    var activeItems = itemsConfig.filter(function(it) { return it.active !== false; });
+    var allBooked = true;
+
+    activeItems.forEach(function(it) {
+      var key = dateStr + "_" + it.id;
+      var isBooked = bookedSet.has(key);
+      var inCart = cart.some(function(c) { return c.date === dateStr && c.itemId === it.id; });
+
+      if (!isBooked) allBooked = false;
+
+      var btn = document.createElement("button");
+      btn.className = "item-btn";
+      if (isBooked) btn.classList.add("booked");
+      else if (inCart) btn.classList.add("in-cart");
+
+      btn.innerHTML = '<span>' + it.name + " — $" + it.price + '</span>';
+      if (isBooked) btn.innerHTML += " <span>BOOKED</span>";
+      else if (inCart) btn.innerHTML += " <span>&#10003;</span>";
+
+      if (!isBooked && dateStr >= todayStr) {
+        (function(ds, itemObj) {
+          btn.onclick = function() { toggleCart(ds, itemObj); };
+        })(dateStr, it);
+      }
+      cell.appendChild(btn);
+    });
+
+    if (activeItems.length > 0 && dateStr >= todayStr) {
+      var fdBtn = document.createElement("button");
+      fdBtn.className = "full-day-btn";
+      fdBtn.textContent = "+ Full Day";
+      var hasAvail = activeItems.some(function(it) {
+        return !bookedSet.has(dateStr + "_" + it.id) && !cart.some(function(c) { return c.date === dateStr && c.itemId === it.id; });
+      });
+      if (!hasAvail) {
+        fdBtn.disabled = true;
+        fdBtn.textContent = "Fully Booked";
+      } else {
+        (function(ds) {
+          fdBtn.onclick = function() { addFullDay(ds); };
+        })(dateStr);
+      }
+      cell.appendChild(fdBtn);
+    } else if (allBooked && activeItems.length > 0) {
+      var fb = document.createElement("div");
+      fb.className = "fully-booked";
+      fb.textContent = "Fully Booked";
+      cell.appendChild(fb);
+    }
+
+    cal.appendChild(cell);
+  }
+}
+
+function fmtDate(d) {
+  var y = d.getFullYear();
+  var m = String(d.getMonth() + 1).padStart(2, "0");
+  var day = String(d.getDate()).padStart(2, "0");
+  return y + "-" + m + "-" + day;
+}
+
+// ========== CART ==========
+function toggleCart(dateStr, item) {
+  var idx = cart.findIndex(function(c) { return c.date === dateStr && c.itemId === item.id; });
+  if (idx >= 0) {
+    cart.splice(idx, 1);
+  } else {
+    cart.push({ date: dateStr, itemId: item.id, itemName: item.name, amount: item.price });
+  }
+  updateCartUI();
+  renderCalendar();
+}
+
+function addFullDay(dateStr) {
+  var activeItems = itemsConfig.filter(function(it) { return it.active !== false; });
+  var added = 0;
+  activeItems.forEach(function(it) {
+    var key = dateStr + "_" + it.id;
+    var inCart = cart.some(function(c) { return c.date === dateStr && c.itemId === it.id; });
+    if (!bookedSet.has(key) && !inCart) {
+      cart.push({ date: dateStr, itemId: it.id, itemName: it.name, amount: it.price });
+      added++;
+    }
+  });
+  if (added > 0) {
+    updateCartUI();
+    renderCalendar();
+  }
+}
+
+function clearCart() {
+  cart = [];
+  updateCartUI();
+  renderCalendar();
+}
+
+function updateCartUI() {
+  var bar = document.getElementById("cartBar");
+  var info = document.getElementById("cartInfo");
+  if (!bar || !info) return;
+  var total = cart.reduce(function(s, c) { return s + c.amount; }, 0);
+  info.textContent = cart.length + " item" + (cart.length !== 1 ? "s" : "") + " — $" + total;
+  bar.classList.toggle("show", cart.length > 0);
+}
+
+// ========== CHECKOUT ==========
+function openCheckout() {
+  if (cart.length === 0) return;
+  paymentComplete = false;
+  document.getElementById("checkoutModal").classList.add("show");
+  document.getElementById("errorBanner").classList.remove("show");
+  document.getElementById("successBanner").classList.remove("show");
+  document.getElementById("doneBtn").classList.add("hidden");
+  document.getElementById("paypal-button-container").classList.remove("hidden");
+
+  document.getElementById("devName").disabled = false;
+  document.getElementById("devPhone").disabled = false;
+  document.getElementById("devEmail").disabled = false;
+
+  renderCartSummary();
+  initPayPal();
+}
+
+function closeCheckout() {
+  document.getElementById("checkoutModal").classList.remove("show");
+  paymentComplete = false;
+  document.getElementById("devName").value = "";
+  document.getElementById("devPhone").value = "";
+  document.getElementById("devEmail").value = "";
+}
+
+function renderCartSummary() {
+  var container = document.getElementById("cartSummary");
+  var total = cart.reduce(function(s, c) { return s + c.amount; }, 0);
+  var html = "<h4>Your Selection</h4>";
+  cart.forEach(function(c, i) {
+    var removeBtn = paymentComplete ? "" : '<span class="remove" onclick="removeFromCart(' + i + ')">Remove</span>';
+    html += '<div class="cart-item"><span>' + c.itemName + " — " + fmtDateNice(c.date) + '</span><span>$' + c.amount + removeBtn + '</span></div>';
+  });
+  html += '<div class="cart-total">Total: $' + total + " CAD</div>";
+  container.innerHTML = html;
+}
+
+function removeFromCart(idx) {
+  if (paymentComplete) return;
+  cart.splice(idx, 1);
+  updateCartUI();
+  renderCalendar();
+  if (cart.length === 0) closeCheckout();
+  else renderCartSummary();
+}
+
+function fmtDateNice(ds) {
+  var parts = ds.split("-");
+  var d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+function showError(msg) {
+  var el = document.getElementById("errorBanner");
+  el.textContent = msg;
+  el.classList.add("show");
+  document.getElementById("successBanner").classList.remove("show");
+}
+function showSuccess(msg) {
+  var el = document.getElementById("successBanner");
+  el.textContent = msg;
+  el.classList.add("show");
+  document.getElementById("errorBanner").classList.remove("show");
+}
+
+// ========== PAYPAL ==========
+var paypalButtons = null;
+function initPayPal() {
+  var container = document.getElementById("paypal-button-container");
+  if (!container) return;
+  container.innerHTML = "";
+
+  if (typeof paypal === "undefined") {
+    showError("PayPal SDK failed to load. Please refresh the page.");
+    return;
+  }
+
+  paypalButtons = paypal.Buttons({
+    style: { layout: "vertical", color: "gold", shape: "rect", label: "pay" },
+    createOrder: function(data, actions) {
+      var name = document.getElementById("devName").value.trim();
+      var email = document.getElementById("devEmail").value.trim();
+      if (!name || !email) {
+        showError("Please fill in your name and email before paying.");
+        return Promise.reject(new Error("Validation failed"));
+      }
+      var total = cart.reduce(function(s, c) { return s + c.amount; }, 0);
+      return actions.order.create({
+        purchase_units: [{
+          amount: { value: total.toFixed(2), currency_code: "CAD" },
+          description: "SMHM Seva Sponsorship — " + cart.length + " item(s)"
+        }],
+        payer: { name: { given_name: name }, email_address: email }
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        var name = document.getElementById("devName").value.trim();
+        var phone = document.getElementById("devPhone").value.trim();
+        var email = document.getElementById("devEmail").value.trim();
+        var payerEmail = details.payer && details.payer.email_address ? details.payer.email_address : email;
+        var orderId = details.id;
+
+        return loadFromSheet().then(function() {
+          var conflicts = [];
+          var cleanCart = [];
+          cart.forEach(function(c) {
+            if (bookedSet.has(c.date + "_" + c.itemId)) {
+              conflicts.push(c);
+            } else {
+              cleanCart.push(c);
+            }
+          });
+
+          if (conflicts.length > 0) {
+            var names = conflicts.map(function(c) { return c.itemName + " on " + fmtDateNice(c.date); }).join(", ");
+            showError("Sorry, these were just booked by someone else: " + names);
+            cart = cleanCart;
+            updateCartUI();
+            renderCalendar();
+            renderCartSummary();
+            return;
+          }
+
+          if (cleanCart.length === 0) {
+            showError("All selected items were just booked by others. Please choose again.");
+            return;
+          }
+
+          var results = [];
+          var writeChain = Promise.resolve();
+
+          cleanCart.forEach(function(c, idx) {
+            writeChain = writeChain.then(function() {
+              if (idx > 0) {
+                return new Promise(function(resolve) { setTimeout(resolve, 2000); });
+              }
+            }).then(function() {
+              var url = GAS_WEB_APP_URL +
+                "?action=book" +
+                "&token=" + encodeURIComponent(SECRET_TOKEN) +
+                "&date=" + encodeURIComponent(c.date) +
+                "&item=" + encodeURIComponent(c.itemId) +
+                "&itemName=" + encodeURIComponent(c.itemName) +
+                "&amount=" + encodeURIComponent(c.amount) +
+                "&name=" + encodeURIComponent(name) +
+                "&phone=" + encodeURIComponent(phone) +
+                "&email=" + encodeURIComponent(email) +
+                "&paypalOrderId=" + encodeURIComponent(orderId) +
+                "&paypalPayerEmail=" + encodeURIComponent(payerEmail);
+
+              return jsonpRequest(url, 45000).catch(function(firstErr) {
+                console.log("First attempt failed for", c.itemId, ":", firstErr.message, "— retrying...");
+                return new Promise(function(resolve) { setTimeout(resolve, 3000); }).then(function() {
+                  return jsonpRequest(url, 45000);
+                });
+              });
+            }).then(function(res) {
+              results.push(res);
+              console.log("Write result:", c.date, c.itemId, res);
+            }).catch(function(err) {
+              results.push({ success: false, error: err.message });
+              console.log("Write failed after retry:", c.date, c.itemId, err.message);
+            });
+          });
+
+          return writeChain.then(function() {
+            var allOk = results.every(function(r) { return r && r.success; });
+            if (allOk) {
+              var confirmUrl = GAS_WEB_APP_URL +
+                "?action=confirm" +
+                "&token=" + encodeURIComponent(SECRET_TOKEN) +
+                "&email=" + encodeURIComponent(email) +
+                "&name=" + encodeURIComponent(name) +
+                "&items=" + encodeURIComponent(JSON.stringify(cleanCart)) +
+                "&total=" + encodeURIComponent(cleanCart.reduce(function(s, c) { return s + c.amount; }, 0)) +
+                "&orderId=" + encodeURIComponent(orderId);
+              return jsonpRequest(confirmUrl, 20000).then(function() {
+                onPaymentSuccess(email, cleanCart);
+              }).catch(function() {
+                onPaymentSuccess(email, cleanCart);
+              });
+            } else {
+              var failed = results.filter(function(r) { return r && !r.success; });
+              var errs = failed.map(function(r) { return r.error; }).join("; ");
+              showError("Some items failed to save: " + errs + ". Please contact donate@smhmajax.ca with your PayPal receipt: " + orderId);
+            }
+          });
+        });
+      });
+    },
+    onError: function(err) {
+      showError("PayPal error: " + (err.message || "Please try again."));
+    }
+  });
+
+  paypalButtons.render("#paypal-button-container");
+}
+
+function onPaymentSuccess(email, cleanCart) {
+  paymentComplete = true;
+  document.getElementById("paypal-button-container").classList.add("hidden");
+  document.getElementById("devName").disabled = true;
+  document.getElementById("devPhone").disabled = true;
+  document.getElementById("devEmail").disabled = true;
+  renderCartSummary();
+  showSuccess("Jai Hanuman! Your sponsorship is confirmed. A confirmation email has been sent to " + email);
+  document.getElementById("doneBtn").classList.remove("hidden");
+  cart = [];
+  updateCartUI();
+  loadFromSheet();
+}
+
+// ========== NAVIGATION ==========
+document.getElementById("prevMonth").onclick = function() {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  renderCalendar();
+};
+document.getElementById("nextMonth").onclick = function() {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  renderCalendar();
+};
+
+// ========== INIT ==========
+function init() {
+  itemsConfig = DEFAULT_ITEMS;
+  festivals = DEFAULT_FESTIVALS;
+  weeklyPujas = DEFAULT_WEEKLY;
+  renderCalendar();
+
+  loadFromSheet().then(function() {
+    setInterval(function() {
+      if (!isLoading) {
+        loadFromSheet().catch(function(e) {
+          console.log("Auto-refresh failed, keeping cached data");
+        });
+      }
+    }, 30000);
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+</script>
+
+<script src="assets/scripts/main.js"></script>
+</body>
+</html>
