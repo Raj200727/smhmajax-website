@@ -1,24 +1,45 @@
-name: Deploy Website to Hostinger
+name: Deploy to Hostinger
 
 on:
   push:
-    branches:
-      - main   
+    branches: [main]
 
 jobs:
-  web-deploy:
-    name: Deploy
+  # ─── STAGE 1: Deploy to Test ───
+  deploy-test:
     runs-on: ubuntu-latest
+    environment:
+      name: test
+      url: https://testsmhmajax.com
     steps:
-    - name: Get latest code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Sync files via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        port: 21
-        protocol: ftp
-        server-dir: ./
+      - name: Deploy to testsmhmajax.com
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /public_html/testsmhmajax.com/
+          local-dir: ./
+
+  # ─── STAGE 2: Deploy to Production (requires approval) ───
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: deploy-test  # Won't start until test succeeds
+    environment:
+      name: production
+      url: https://smhmajax.ca
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to smhmajax.ca
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /public_html/
+          local-dir: ./
