@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sankat Mochan Hanuman Mandir & Cultural Centre</title>
+<title>Pujas & Bookings — Sankat Mochan Hanuman Mandir</title>
 <link rel="icon" type="image/png" href="assets/images/mandir-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=5">
+<link rel="stylesheet" href="assets/css/style.css?v=6">
+<!-- PayPal SDK for Seva Sponsorship -->
+<script src="https://www.paypal.com/sdk/js?client-id=BAA6aG4muYaITIRcMH6ucv5_zOe55cMm6drxLJ-IjUaItV4yhsNR04zKeTYrm-78n_yAFvtx6_y6s6YVQM&currency=CAD&intent=capture&components=buttons"></script>
 </head>
 <body>
 
@@ -30,7 +32,7 @@
       <a href="gallery.html">Gallery</a>
       <a href="contact.html">Contact</a>
       <a href="new-mandir.html">New Mandir</a>
-      <a href="bookings.html">Pujas &amp; Bookings</a>
+      <a href="bookings.html" class="nav-active">Pujas &amp; Bookings</a>
     </div>
 
     <a href="donate.html" class="nav-donate">Donate</a>
@@ -65,7 +67,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
         Call: 416-846-0726
       </a>
-      <a href="https://chat.whatsapp.com/BrThPoKEJ9B8SSu4EonEC3" target="_blank" class="booking-cta-whatsapp">
+      <a href="https://wa.me/14168460726" target="_blank" class="booking-cta-whatsapp">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         WhatsApp
       </a>
@@ -82,7 +84,7 @@
       <div class="booking-intro-icon">🪔</div>
       <div>
         <p class="booking-intro-text">Panditji performs all Vedic rituals with full mantras, traditional method and devotion. All ceremonies available at your home, the Mandir, or any venue in the GTA.</p>
-        <a href="#" class="booking-inline-link">→ Click here to submit a private booking request</a>
+        <a href="#sponsor-seva" class="booking-inline-link">→ Scroll down to sponsor a Mandir Seva online</a>
       </div>
     </div>
 
@@ -159,7 +161,7 @@
         </ul>
       </div>
 
-    </div><!-- /booking-grid -->
+    </div>
 
     <!-- Bottom CTA Banner -->
     <div class="booking-bottom-banner fade-up">
@@ -180,14 +182,147 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           WhatsApp
         </a>
-        <a href="#" class="booking-contact-btn booking-contact-book">
+        <a href="#sponsor-seva" class="booking-contact-btn booking-contact-book">
           Book Online →
         </a>
       </div>
     </div>
 
+    <!-- ═══ ONLINE SEVA BOOKING WIDGET ═══ -->
+    <div id="sponsor-seva" class="seva-booking-wrapper fade-up" style="margin-top: 80px;">
+      <div class="seva-booking-header">
+        <h2 class="section-title" style="text-align:center; font-size: 2.2rem;">Sponsor a Seva Online</h2>
+        <p class="section-body" style="text-align:center; max-width: 600px; margin: 0 auto;">Book Archana, Mala, Vastra &amp; Priti Bhoj sponsorships for Sankat Mochan Hanuman Mandir, Ajax.</p>
+      </div>
+
+      <div class="seva-container">
+        <div class="seva-legend">
+          <span><span class="seva-dot avail"></span> Available</span>
+          <span><span class="seva-dot sel"></span> Selected</span>
+          <span><span class="seva-dot booked"></span> Already booked</span>
+        </div>
+
+        <div class="seva-cal-nav">
+          <button id="prevMonth">&#10094;</button>
+          <h2 id="monthYear" style="color: var(--crimson-dk);">August 2026</h2>
+          <button id="nextMonth">&#10095;</button>
+        </div>
+
+        <div class="seva-weekdays">
+          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        </div>
+        
+        <div class="seva-calendar-grid" id="calendar"></div>
+
+        <div class="seva-sync-status" id="syncStatus">Loading...
+          <button class="seva-refresh-btn" onclick="forceRefresh()">Refresh Now</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<!-- ═══ CART & CHECKOUT ELEMENTS ═══ -->
+<div class="seva-cart-bar" id="cartBar">
+  <div class="seva-cart-info" id="cartInfo">0 items — $0</div>
+  <div class="seva-cart-actions">
+    <button class="seva-btn-clear" onclick="clearCart()">Clear</button>
+    <button class="seva-btn-checkout" onclick="openCheckout()">Checkout</button>
+  </div>
+</div>
+
+<div class="seva-modal-overlay" id="checkoutModal">
+  <div class="seva-modal">
+    <button class="seva-modal-close" onclick="closeCheckout()">&times;</button>
+    <h3 style="font-family:'Cinzel', serif; font-size: 1.5rem; color: var(--crimson-dk); margin-bottom: 16px;">Complete Sponsorship</h3>
+    <div class="seva-error-banner" id="errorBanner"></div>
+    <div class="seva-success-banner" id="successBanner"></div>
+    <div class="seva-cart-summary" id="cartSummary"></div>
+    <div class="seva-form-group">
+      <label>Full Name</label>
+      <input type="text" id="devName" placeholder="Enter your full name">
+    </div>
+    <div class="seva-form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="devPhone" placeholder="e.g. 647-555-1234">
+    </div>
+    <div class="seva-form-group">
+      <label>Email Address</label>
+      <input type="email" id="devEmail" placeholder="your@email.com">
+    </div>
+    <div id="paypal-button-container"></div>
+    <button class="seva-done-btn hidden" id="doneBtn" onclick="closeCheckout()">Done — Close Window</button>
+  </div>
+</div>
+
+<!-- ═══ ADMIN PANEL MODAL (PASSWORD LOCKED) ═══ -->
+<div class="admin-modal-overlay" id="adminModal">
+  <div class="admin-modal-container">
+    <button class="admin-modal-close" onclick="closeAdminPanel()">&times;</button>
+    
+    <div class="admin-header">
+      <h1>SMHM Admin Panel</h1>
+      <p>Add cash or e-transfer bookings manually</p>
+    </div>
+
+    <div class="admin-success-msg" id="adminSuccessMsg"></div>
+    <div class="admin-error-msg" id="adminErrorMsg"></div>
+
+    <div class="admin-form-group">
+      <label>Booking Date</label>
+      <input type="date" id="adminBookingDate">
+    </div>
+
+    <div class="admin-form-group">
+      <label>Item</label>
+      <select id="adminItemSelect">
+        <option value="">Select an item...</option>
+        <option value="archana" data-name="Daily Archana" data-price="21">Daily Archana — $21</option>
+        <option value="mala" data-name="Morning Mala" data-price="31">Morning Mala — $31</option>
+        <option value="vastra" data-name="Vastra Seva" data-price="51">Vastra Seva — $51</option>
+        <option value="pritibhoj_basic" data-name="Priti Bhoj — Basic" data-price="280">Priti Bhoj — Basic — $280</option>
+        <option value="pritibhoj_mid" data-name="Priti Bhoj — Mid" data-price="400">Priti Bhoj — Mid — $400</option>
+        <option value="pritibhoj_premium" data-name="Priti Bhoj — Premium" data-price="530">Priti Bhoj — Premium — $530</option>
+      </select>
+    </div>
+
+    <div class="admin-form-group">
+      <label>Devotee Name</label>
+      <input type="text" id="adminDevName" placeholder="e.g. Ramesh Kumar">
+    </div>
+
+    <div class="admin-form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="adminDevPhone" placeholder="e.g. 647-555-1234">
+    </div>
+
+    <div class="admin-form-group">
+      <label>Email Address</label>
+      <input type="email" id="adminDevEmail" placeholder="e.g. ramesh@email.com">
+    </div>
+
+    <div class="admin-form-group">
+      <label>Payment Method</label>
+      <select id="adminPaymentMethod">
+        <option value="Cash">Cash</option>
+        <option value="E-Transfer">E-Transfer</option>
+      </select>
+    </div>
+
+    <div class="admin-form-group">
+      <label>Notes</label>
+      <textarea id="adminNotes" placeholder="e.g. Paid at temple on Aug 20"></textarea>
+    </div>
+
+    <div class="admin-form-group">
+      <label>Your Name (Admin)</label>
+      <input type="text" id="adminName" placeholder="e.g. Arjuna">
+    </div>
+
+    <button class="admin-btn-submit" id="adminSubmitBtn" onclick="addAdminBooking()">Add Booking</button>
+  </div>
+</div>
 
 <!-- ═══ FOOTER ═══ -->
 <footer>
@@ -228,10 +363,11 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 Sankat Mochan Hanuman Mandir & Cultural Centre Inc. · Ajax, Canada · Registered Non-Profit</span>
+      <span>© 2026 Sankat Mochan Hanuman Mandir & Cultural Centre Inc. · Ajax, Canada · Registered Non-Profit</span>
       <span>
         <a href="mailto:sankatmochanhanumanmandirajax@gmail.com">sankatmochanhanumanmandirajax@gmail.com</a> &nbsp;·&nbsp;
-        <a href="mailto:donations@smhmajax.ca">donations@smhmajax.ca</a>
+        <a href="mailto:donations@smhmajax.ca">donations@smhmajax.ca</a> &nbsp;·&nbsp;
+        <a href="#" onclick="openAdminPanel(event)">Admin</a>
       </span>
     </div>
   </div>
