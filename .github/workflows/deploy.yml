@@ -18,9 +18,9 @@ jobs:
       - name: Deploy to testsmhmajax.com
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          server: ${{ secrets.TEST_FTP_SERVER }}
+          username: ${{ secrets.TEST_FTP_USERNAME }}
+          password: ${{ secrets.TEST_FTP_PASSWORD }}
           server-dir: /public_html/testsmhmajax.com/
           local-dir: ./
 
