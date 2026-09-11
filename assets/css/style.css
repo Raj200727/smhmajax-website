@@ -1730,13 +1730,29 @@ footer {
 .footer-bottom a:hover { color:var(--gold); }
 
 /* ═══ RESPONSIVE ═══ */
-@media(max-width:1024px){
-  .grid-2,.donate-grid,.stream-info,.contact-grid,.events-grid{grid-template-columns:1fr}
-  .deity-grid{grid-template-columns:repeat(3,1fr)}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .about-img-float{display:none}
-  .hero-murti-left { width: 40%; opacity: 0.3; }
-  .hero-murti-right { display: block; width: 40%; opacity: 0.3; }
+@media (max-width: 1024px) {
+  .hero-murti-left {
+    position: absolute;
+    left: -20px; /* Pulls the image outward toward the left edge */
+    top: 0;
+    bottom: 0;
+    width: 50%;  /* Expands the width to cover more space */
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  .hero-murti-right {
+    display: block !important;
+    position: absolute;
+    right: -20px; /* Pulls the image outward toward the right edge */
+    top: 0;
+    bottom: 0;
+    width: 50%;  /* Expands the width to cover more space */
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
 }
 @media(max-width:768px){
   .nav-links,.nav-donate{display:none}
