@@ -1,153 +1,148 @@
-# Sankat Mochan Hanuman Mandir Website
+# Sankat Mochan Hanuman Mandir Website 🛕
 
-Official website project for Sankat Mochan Hanuman Mandir & Cultural Centre, Ajax, Ontario.
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![Google Apps Script](https://img.shields.io/badge/Google_Apps_Script-4285F4?style=flat&logo=google&logoColor=white)
+![Deployment](https://github.com/Raj200727/smhmajax-website/actions/workflows/deploy.yml/badge.svg)
 
-## Overview
+A production-style digital presence and management platform for Sankat Mochan Hanuman Mandir (Ajax, Ontario).
 
-This website serves as the digital presence for the temple and provides:
+The platform utilizes a hybrid architecture, combining a lightweight static frontend with a serverless Google Apps Script backend and a Google Sheets database. It features a fully integrated online Seva booking system, automated payment processing via the PayPal SDK, and an automated two-stage deployment pipeline to Hostinger via GitHub Actions.
 
-- Temple information
-- Weekly puja schedule
-- Upcoming events
-- Live stream access
-- Gallery of temple deities
-- Contact information
-- Donation information
+**[Live Website →](https://smhmajax.ca)**
 
-## Technology Stack
+---
 
-- HTML5
-- CSS3
-- JavaScript (Vanilla JS)
-- GitHub Pages (Current Hosting)
-- Git & GitHub for Version Control
+## What it does
+
+The project provides:
+
+- Automated Seva & Puja bookings linked directly to Google Sheets.
+- Live PayPal checkout integration (Sandbox and Live).
+- Chronological, responsive photo galleries with year-filtering.
+- 3-column directory for 16 Hindu Samskars, Pujas, and Special Occasions.
+- Two-stage CI/CD deployment pipeline to Sandbox and Production environments.
+
+---
+
+## Core Technologies
+
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript.
+- **Backend Bridge:** Google Apps Script (`smhm-apps-script-v2.gs`).
+- **Database:** Google Sheets (`SHEET-TABS-v2.txt` layout).
+- **Payments:** PayPal SDK.
+- **Hosting & CI/CD:** Hostinger LiteSpeed Web Server, GitHub Actions FTP Deployment.
+
+---
+
+## System Architecture
+
+The application is split into three discrete layers to bypass CORS restrictions without a heavy traditional server.
+
+```text
+┌─────────────────────────────────────────────────────────┐
+│                    PRESENTATION LAYER                   │
+│                                                         │
+│  HTML5 / CSS3 / Vanilla JS                              │
+│  - Custom CSS Grid Gallery                              │
+│  - Interactive Booking Grid                             │
+│  - PayPal Checkout Modal (booking-v4.html)              │
+└──────────────────┬──────────────────────────────────────┘
+                   │
+                   │ JSONP Requests
+                   ▼
+┌─────────────────────────────────────────────────────────┐
+│                      SERVICE LAYER                      │
+│                                                         │
+│  Google Apps Script (smhm-apps-script-v2.gs)            │
+│  - Handles JSONP bridging and duplicate checks          │
+│  - Triggers Admin email confirmations                   │
+└──────────────────┬──────────────────────────────────────┘
+                   │
+                   │ Data Read / Write
+                   ▼
+┌─────────────────────────────────────────────────────────┐
+│                       DATA LAYER                        │
+│                                                         │
+│  Google Sheets                                          │
+│  - Master Transaction Logging                           │
+│  - Real-time Slot Availability Tracking                 │
+└─────────────────────────────────────────────────────────┘
+```
+## Core Features
+
+### 1. Hybrid Booking Engine (`bookings.html`)
+*   **3-Column Responsive Grid:** Displays 16 Hindu Samskars, Pujas & Paaths, and Special Occasions side-by-side on desktop, collapsing seamlessly to a single column on mobile screens.
+*   **Database Integration:** Communicates with a live Google Sheet via a Google Apps Script webhook to record devotees' details, order IDs, and timestamps securely.
+
+### 2. Event Gallery System (`gallery.html`)
+*   **Responsive Photo Grid:** Utilizes a CSS Grid to dynamically fit images across screen sizes.
+*   **Performance:** Uses the `loading="lazy"` attribute to ensure fast page load times despite housing a large number of high-resolution images.
+
+### 3. CI/CD Deployment Pipeline (`deploy.yml`)
+The project utilizes a two-stage GitHub Actions FTP pipeline to deploy code seamlessly without manual FTP uploads:
+*   **Stage 1 (Sandbox):** Commits pushed to the `main` branch automatically deploy to the testing environment (`testsmhmajax.com`) using dedicated `TEST_FTP_` GitHub Secrets.
+*   **Stage 2 (Production):** A manual approval gate deploys the validated code directly to Hostinger's `public_html` directory for the live `smhmajax.ca` domain.
+
+### 4. Branding & Design System
+*   **Visual Assets:** Features the official Mandir logo (`mandir-icon.png`) in the navigation and a Canadian flag SVG (`ca.svg`) in the hero section.
+*   **Custom CSS Variables:** Relies on a strict color palette, including `--crimson-dk`, `--ivory`, and `--gold`, to maintain aesthetic consistency across all pages.
+
+---
 
 ## Project Structure
 
 ```text
 smhmajax-website/
 │
-├── index.html
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
 │
 ├── assets/
 │   ├── css/
 │   │   └── style.css
-│   │
 │   ├── images/
-│   │   ├── hanuman-ji.jpg
-│   │   ├── shiv-ji.jpg
-│   │   ├── radha-krishna.jpg
-│   │   ├── satyanarayan.jpg
-│   │   ├── durga-maa.jpg
-│   │   └── durga-maa-red.jpg
-│   │
+│   │   ├── 9 days/
+│   │   ├── Hanuman Jayanti/
+│   │   ├── Hanuman Ji Holi Shrin.../
+│   │   ├── Krishna Janmashtami .../
+│   │   ├── Mahashivratri 2024/
+│   │   ├── Mahashivratri 2025/
+│   │   ├── Mahashivratri 2026/
+│   │   ├── Ram Navmi 2026/
+│   │   ├── sita 2026/
+│   │   ├── Vasant Panchmi 2024/
+│   │   ├── Vasant Panchmi 2025/
+│   │   ├── Vjaya Dashmi 2025/
+│   │   ├── ca.svg
+│   │   ├── mandir-icon.png
+│   │   ├── mandir-icon1.jpeg
+│   │   ├── new_temple_pic.png
+│   │   └── [Various Deity & Hero Images...]
 │   └── scripts/
 │       └── main.js
 │
+├── .gitignore
+├── about.html
+├── bookings.html
+├── contact.html
+├── deities.html
+├── donate.html
+├── events.html
+├── gallery.html
+├── index.html
+├── livestream.html
+├── new-mandir.html
 └── README.md
 ```
-
-## Features
-
-### Current
-
-- Responsive design
-- Hero section
-- Temple overview
-- Events calendar
-- Weekly puja schedule
-- YouTube live stream integration
-- Deity gallery
-- Hover effects and overlays
-- Contact directory
-- Donation section
-
-### Planned
-
-- Event photo galleries
-- Newsletter archive
-- About Hanuman Ji page
-- Volunteer registration
-- Contact form
-- Analytics dashboard
-- Azure deployment
-- CI/CD pipeline
-
-## Local Development
-
-Clone the repository:
-
-```bash
-git clone https://github.com/Raj200727/smhmajax-website.git
-```
-
-Open the project:
-
-```bash
-cd smhmajax-website
-```
-
-Launch locally using:
-
-- VS Code Live Server
-- Python HTTP Server
-- Any local web server
-
-Example:
-
-```bash
-python -m http.server 8000
-```
-
-## Deployment
-
-Current deployment:
-
-GitHub Pages
-
-Live Site:
-
-https://raj200727.github.io/smhmajax-website/
-
-## Future Deployment Roadmap
-
-Planned migration:
-
-- Azure Static Web Apps
-- GitHub Actions CI/CD
-- Custom domain (smhmajax.ca)
-- SSL/TLS certificates
-- Analytics integration
-
-## Version Control Workflow
-
-Feature branches:
-
-```text
-feature/add-gallery
-feature/calendar-update
-feature/about-hanuman
-feature/live-stream-updates
-```
-
-Example commit format:
-
-```text
-feat: add deity descriptions and hover overlays
-fix: correct image references in gallery
-refactor: move images into assets folder
-```
-
 ## Author
-
-Rajveer Sharma
-
-GitHub:
-https://github.com/Raj200727
+**Rajveer Sharma**  
+GitHub: [Raj200727](https://github.com/Raj200727)
 
 ## Organization
-
-Sankat Mochan Hanuman Mandir & Cultural Centre
-Ajax, Ontario, Canada
-
-Established: 2011
+**Sankat Mochan Hanuman Mandir & Cultural Centre**  
+Ajax, Ontario, Canada  
+Contact Pandit Rabindranath Tiwari: [416-846-0726](tel:4168460726) / [WhatsApp](https://wa.me/14168460726)  
+Support/Admin: [donations@smhmajax.ca](mailto:donations@smhmajax.ca)
