@@ -117,7 +117,7 @@ if (document.readyState === 'loading') {
 var GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyVVpceVTVCI6vTuvNZB5ZzS9Ql9nflZPiUMvL8VENwd9ngH2ahvohap33BDZcgUGx2/exec";
 var SECRET_TOKEN = "05DjNwOYrNf9RDXqb-j5fw";
 
-var currentDate = new Date(2026, 7, 1);
+var currentDate = new Date(2026, 8, 1);
 var cart = [];
 var bookedSet = new Set();
 var itemsConfig = [];
@@ -299,6 +299,18 @@ function forceRefresh() {
   loadFromSheet();
 }
 
+// Helper: Check if item is a Priti Bhoj tier
+function isPritiBhoj(itemId) {
+  return itemId && String(itemId).toLowerCase().indexOf('pritibhoj') === 0;
+}
+
+// Helper: Check if ANY Priti Bhoj size is already booked on a date
+function isPritiBhojBookedOnDate(dateStr) {
+  return bookedSet.has(dateStr + "_pritibhoj_basic") ||
+         bookedSet.has(dateStr + "_pritibhoj_mid") ||
+         bookedSet.has(dateStr + "_pritibhoj_premium");
+}
+
 function renderCalendar() {
   var cal = document.getElementById("calendar");
   var monthYear = document.getElementById("monthYear");
@@ -348,22 +360,48 @@ function renderCalendar() {
     var allBooked = true;
 
     activeItems.forEach(function(it) {
+      // 1. RESTRICTION: Show Priti Bhoj ONLY on Tuesdays (2) and Sundays (0)
+      if (isPritiBhoj(it.id) && dayOfWeek !== 0 && dayOfWeek !== 2) {
+        return;
+      }
+
       var key = dateStr + "_" + it.id;
       var isBooked = bookedSet.has(key);
+
+      // 2. RESTRICTION: Lock all sizes if ANY Priti Bhoj tier is booked in GS
+      if (isPritiBhoj(it.id) && isPritiBhojBookedOnDate(dateStr)) {
+        isBooked = true;
+      }
+
       var inCart = cart.some(function(c) { return c.date === dateStr && c.itemId === it.id; });
+      var otherPbInCart = isPritiBhoj(it.id) && cart.some(function(c) {
+        return c.date === dateStr && isPritiBhoj(c.itemId) && c.itemId !== it.id;
+      });
 
       if (!isBooked) allBooked = false;
 
       var btn = document.createElement("button");
       btn.className = "seva-item-btn";
-      if (isBooked) btn.classList.add("booked");
-      else if (inCart) btn.classList.add("in-cart");
 
-      btn.innerHTML = '<span>' + it.name + " — $" + it.price + '</span>';
-      if (isBooked) btn.innerHTML += " <span>BOOKED</span>";
-      else if (inCart) btn.innerHTML += " <span>&#10003;</span>";
+      if (isBooked) {
+        btn.classList.add("booked");
+        btn.innerHTML = '<span>' + it.name + " — $" + it.price + '</span> <span>BOOKED</span>';
+        btn.disabled = true;
+      } else if (otherPbInCart) {
+        // Mutual exclusion: disable other 2 sizes if 1 is already in cart
+        btn.classList.add("booked");
+        btn.style.opacity = "0.45";
+        btn.style.cursor = "not-allowed";
+        btn.innerHTML = '<span>' + it.name + " — $" + it.price + '</span> <span>UNAVAILABLE</span>';
+        btn.disabled = true;
+      } else if (inCart) {
+        btn.classList.add("in-cart");
+        btn.innerHTML = '<span>' + it.name + " — $" + it.price + '</span> <span>&#10003;</span>';
+      } else {
+        btn.innerHTML = '<span>' + it.name + " — $" + it.price + '</span>';
+      }
 
-      if (!isBooked && dateStr >= todayStr) {
+      if (!isBooked && !otherPbInCart && dateStr >= todayStr) {
         (function(ds, itemObj) {
           btn.onclick = function() { toggleCart(ds, itemObj); };
         })(dateStr, it);
@@ -376,6 +414,8 @@ function renderCalendar() {
       fdBtn.className = "seva-full-day-btn";
       fdBtn.textContent = "+ Full Day";
       var hasAvail = activeItems.some(function(it) {
+        if (isPritiBhoj(it.id) && (dayOfWeek !== 0 && dayOfWeek !== 2)) return false;
+        if (isPritiBhoj(it.id) && isPritiBhojBookedOnDate(dateStr)) return false;
         return !bookedSet.has(dateStr + "_" + it.id) && !cart.some(function(c) { return c.date === dateStr && c.itemId === it.id; });
       });
       if (!hasAvail) {
@@ -410,6 +450,12 @@ function toggleCart(dateStr, item) {
   if (idx >= 0) {
     cart.splice(idx, 1);
   } else {
+    // If selecting Priti Bhoj, remove any existing Priti Bhoj size for this date
+    if (isPritiBhoj(item.id)) {
+      cart = cart.filter(function(c) {
+        return !(c.date === dateStr && isPritiBhoj(c.itemId));
+      });
+    }
     cart.push({ date: dateStr, itemId: item.id, itemName: item.name, amount: item.price });
   }
   updateCartUI();
@@ -419,7 +465,17 @@ function toggleCart(dateStr, item) {
 function addFullDay(dateStr) {
   var activeItems = itemsConfig.filter(function(it) { return it.active !== false; });
   var added = 0;
+  var parts = dateStr.split("-");
+  var dayOfWeek = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])).getDay();
+  var pbAdded = cart.some(function(c) { return c.date === dateStr && isPritiBhoj(c.itemId); }) || isPritiBhojBookedOnDate(dateStr);
+
   activeItems.forEach(function(it) {
+    if (isPritiBhoj(it.id)) {
+      if (dayOfWeek !== 0 && dayOfWeek !== 2) return; // Skip non-Tue/Sun
+      if (pbAdded) return; // Add only 1 size maximum for Priti Bhoj
+      pbAdded = true;
+    }
+
     var key = dateStr + "_" + it.id;
     var inCart = cart.some(function(c) { return c.date === dateStr && c.itemId === it.id; });
     if (!bookedSet.has(key) && !inCart) {
@@ -427,6 +483,7 @@ function addFullDay(dateStr) {
       added++;
     }
   });
+
   if (added > 0) {
     updateCartUI();
     renderCalendar();
