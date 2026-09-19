@@ -44,28 +44,73 @@ if (donateBtn) {
     );
   });
 }
-// ── POSTER SLIDER (MANUAL & AUTOMATIC) ──
-let currentSlide = 0;
-let slideTimer; 
+// ── POSTER SLIDER (MANUAL & AUTOMATIC, SEAMLESS INFINITE LOOP) ──
+let currentSlide = 1;      // 1-indexed because a cloned "last" slide sits at position 0
+let slideTimer;
+let totalRealSlides = 0;
+let isSliderTransitioning = false;
+
+function setupInfiniteSlider() {
+  const track = document.getElementById('sliderTrack');
+  if (!track) return;
+
+  const slides = Array.from(track.querySelectorAll('img'));
+  totalRealSlides = slides.length;
+  if (totalRealSlides === 0) return;
+
+  // Clone the first and last real slides so the track always has a real-looking
+  // slide to slide onto in either direction — no jump back to slide 1.
+  const firstClone = slides[0].cloneNode(true);
+  const lastClone = slides[totalRealSlides - 1].cloneNode(true);
+  firstClone.setAttribute('aria-hidden', 'true');
+  lastClone.setAttribute('aria-hidden', 'true');
+
+  track.insertBefore(lastClone, slides[0]);
+  track.appendChild(firstClone);
+
+  // Land on the first real slide (index 1, since the clone of the last slide is at index 0)
+  currentSlide = 1;
+  track.style.transition = 'none';
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  void track.offsetWidth; // force reflow so the transition-less jump applies immediately
+  track.style.transition = '';
+
+  track.addEventListener('transitionend', onSliderTransitionEnd);
+}
 
 function moveSlide(direction) {
   const track = document.getElementById('sliderTrack');
+  if (!track || isSliderTransitioning) return;
 
-  if (!track) return; 
-  
-  const totalSlides = track.querySelectorAll('img').length;
+  isSliderTransitioning = true;
   currentSlide += direction;
-
-  if (currentSlide < 0) {
-    currentSlide = totalSlides - 1;
-  } 
-  else if (currentSlide >= totalSlides) {
-    currentSlide = 0;
-  }
-
   track.style.transform = `translateX(-${currentSlide * 100}%)`;
-  
+
   startSlideTimer();
+}
+
+function onSliderTransitionEnd(e) {
+  if (e.propertyName && e.propertyName !== 'transform') return;
+  const track = document.getElementById('sliderTrack');
+  if (!track) return;
+
+  isSliderTransitioning = false;
+
+  // Once we've visually landed on a clone, silently re-point to the matching
+  // real slide with no transition — the motion itself never reverses.
+  if (currentSlide >= totalRealSlides + 1) {
+    currentSlide = 1;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    void track.offsetWidth;
+    track.style.transition = '';
+  } else if (currentSlide <= 0) {
+    currentSlide = totalRealSlides;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    void track.offsetWidth;
+    track.style.transition = '';
+  }
 }
 
 function startSlideTimer() {
@@ -79,11 +124,18 @@ function startSlideTimer() {
   }, 4000);
 }
 
-// Start the automatic timer as soon as the page loads
-if (document.readyState === 'loading') {
-  document.addEventListener("DOMContentLoaded", startSlideTimer);
-} else {
+function initInfiniteSlider() {
+  const track = document.getElementById('sliderTrack');
+  if (!track) return;
+  setupInfiniteSlider();
   startSlideTimer();
+}
+
+// Start the automatic timer (and set up the loop) as soon as the page loads
+if (document.readyState === 'loading') {
+  document.addEventListener("DOMContentLoaded", initInfiniteSlider);
+} else {
+  initInfiniteSlider();
 }
   function filterGallery(year) {
     // 1. Update active styling on the buttons
